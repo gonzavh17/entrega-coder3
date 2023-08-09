@@ -48,7 +48,7 @@ export default class ProductManager {
     await fs.writeFile("products.json", JSON.stringify(products));
   }
 
-  async getProductsbyId(id) {
+  async getProductsById(id) {
     const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
 
     const searchedProduct = products.find((prod) => prod.id === id);

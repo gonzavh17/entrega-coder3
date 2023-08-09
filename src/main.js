@@ -26,12 +26,14 @@ app.get('/products', async (req, res) => {
 
 app.get('/products/:pid', async (req, res) => {
 
-    const {pid} = req.params
-    const products = await productManager1.getProducts()
-
-    const foundId = products.find(prod => prod.id === parseInt(pid))
-    console.log(foundId)
-    res.send({status: "Success", foundId})
+    if (req.params.pid) {
+        const product = productManager1.getProductsById(parseInt(req.params.pid));
+        console.log(product)
+        return res.send(product);
+    }
+    else {
+        return console.error("Producto no existente")
+    }
 
 });
 
