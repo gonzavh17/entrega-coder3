@@ -25,28 +25,15 @@ app.get('/products', async (req, res) => {
 })
 
 app.get('/products/:pid', async (req, res) => {
-    const { pid } = req.params;
-    try {
-        const products = await productManager1.getProducts();
 
-        if (!Array.isArray(products)) {
-            res.status(500).send({ status: "Error", message: "Invalid products data" });
-            return;
-        }
+    const {pid} = req.params
+    const products = await productManager1.getProducts()
 
-        const foundId = products.find(prod => prod.id === parseInt(pid));
-        if (foundId) {
-            console.log(foundId);
-            res.send({ status: "Success", foundId });
-        } else {
-            res.status(404).send({ status: "Error", message: "Product not found" });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send({ status: "Error", message: "Internal server error" });
-    }
+    const foundId = products.find(prod => prod.id === parseInt(pid))
+    console.log(foundId)
+    res.send({status: "Success", foundId})
+
 });
-
 
 app.listen(PORT, () => {
     console.log(`server on port ${PORT}`)
