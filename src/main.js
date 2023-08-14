@@ -1,42 +1,41 @@
-import express from 'express'
-import ProductManager from './productManager.js';
-const productManager1 = new ProductManager("Data/products.json")
+import express from 'express';
+import { ProductManager } from './ProductManager.js';
 
-const app = express()
-const PORT = 4000
-app.get(express.json())
-app.get(express.urlencoded({extended:true}))
+const manager = new ProductManager('Data/products.json')
+const app = express();
+const PORT = 4000;
 
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-res.send("Hello World")
-})
+	res.send('Hola Mundo');
+});
+
 
 app.get('/products', async (req, res) => {
     const {limit} = req.query
-    const products = await productManager1.getProducts()
-    if(limit) {
-        const limitProducts = products.slice(0, limit)
-        res.json({status: "Succes", limitProducts})
+    const products = await manager.getProducts()
+    if (limit) {
+        res.send(products.slice(0, limit));
     } else {
-        res.json({status : "Success", products})
+        res.send(products);
     }
-
 })
 
 app.get('/products/:pid', async (req, res) => {
-
-    if (req.params.pid) {
-        const product = productManager1.getProductsById(parseInt(req.params.pid));
-        console.log(product)
-        return res.send(product);
+    const product = await manager.getProductsById(parseInt(req.params.pid))
+    if(product) {
+        res.send(product)
+    } else {
+        res.send('Producto no encontrado')
     }
-    else {
-        return console.error("Producto no existente")
-    }
+})
 
-});
+app.get('*', (req, res) => {
+    res.send("Error 404 not found")
+})
+
 
 app.listen(PORT, () => {
-    console.log(`server on port ${PORT}`)
+    console.log(`Server on port ${PORT}`)
 })

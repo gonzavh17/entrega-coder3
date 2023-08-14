@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 
- class Product {
-  constructor(title, description, price, thumbnail, code, stock) {
+class Product {
+  constructor({title, description, price, thumbnail, code, stock}) {
     this.title = title;
     this.description = description;
     this.price = price;
@@ -13,26 +13,23 @@ import { promises as fs } from "fs";
 
   static incrementarID() {
     if (this.idIncrement) {
-      
-      this.idIncrement++; 
+      this.idIncrement++;
     } else {
-      this.idIncrement = 1; 
+      this.idIncrement = 1;
     }
     return this.idIncrement;
   }
 }
 
-export default class ProductManager {
+export class ProductManager {
   constructor(path) {
+    this.products = [];
     this.path = path;
   }
 
-
-
   async getProducts() {
     const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
-
-    console.log(products);
+    return products;
   }
 
   async addProduct(product) {
@@ -54,7 +51,7 @@ export default class ProductManager {
     const searchedProduct = products.find((prod) => prod.id === id);
 
     if (searchedProduct) {
-      console.log(searchedProduct);
+      return searchedProduct
     } else {
       console.log("El producto buscado no existe");
     }
@@ -118,7 +115,6 @@ const product1 = new Product(
 /* UPDATE PRODUCT */
 /* productManager.updateProduct(1,{title: "arroz", description:"arroz integral", price: 1000, thumbnail: "imagen1.jpg", code: "555", stock: 450}) */
 
-
 /* GET PRODUCTS BY ID */
 // productManager.getProductsbyId(1)
 // productManager.getProductsbyId(2) /* devuelve el producto buscado no existe */
@@ -126,6 +122,5 @@ const product1 = new Product(
 /* GET PRODUCTS */
 // productManager.getProducts();
 
-
 /* DELETE PRODUCTS */
-// productManager.deleteProduct(1) 
+// productManager.deleteProduct(1)
