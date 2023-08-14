@@ -27,12 +27,12 @@ app.get('/products/:pid', async (req, res) => {
     if(product) {
         res.send(product)
     } else {
-        res.send('Producto no encontrado')
+        res.status(404).send('Producto no encontrado')
     }
 })
 
 app.get('*', (req, res) => {
-    res.send("Error 404 not found")
+    res.status(404).send('Not Found')
 })
 
 
